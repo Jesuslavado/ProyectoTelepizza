@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <EditText
+        android:id="@+id/usuario"
+        android:layout_width="327dp"
+        android:layout_height="62dp"
+        android:layout_marginStart="42dp"
+        android:layout_marginTop="75dp"
+        android:layout_marginEnd="42dp"
+        android:ems="10"
+        android:hint="Introduzca Usuario"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/contrasenia"
+        android:layout_width="327dp"
+        android:layout_height="62dp"
+        android:layout_marginStart="42dp"
+        android:layout_marginTop="160dp"
+        android:layout_marginEnd="42dp"
+        android:ems="10"
+        android:hint="Introduzca Contraseña"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/biniciarsesion"
+        android:layout_width="240dp"
+        android:layout_height="85dp"
+        android:layout_marginStart="85dp"
+        android:layout_marginTop="101dp"
+        android:layout_marginEnd="86dp"
+        android:text="Iniciar Sesión"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/contrasenia" />
+
+    <Button
+        android:id="@+id/bregistrar"
+        android:layout_width="240dp"
+        android:layout_height="85dp"
+        android:layout_marginStart="85dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="86dp"
+        android:text="Registrar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/biniciarsesion" />
+</androidx.constraintlayout.widget.ConstraintLayout>
