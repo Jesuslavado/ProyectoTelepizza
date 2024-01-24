@@ -14,7 +14,7 @@
         android:layout_marginTop="75dp"
         android:layout_marginEnd="42dp"
         android:ems="10"
-        android:hint="Introduzca Usuario"
+        android:hint="Introduzca Correo"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,7 +31,6 @@
         android:hint="Introduzca Contraseña"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -58,4 +57,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/biniciarsesion" />
+
+    <ImageView
+        android:id="@+id/fondo"
+        android:layout_width="409dp"
+        android:layout_height="371dp"
+        android:layout_marginTop="188dp"
+        android:layout_marginEnd="2dp"
+        android:alpha="0.1"
+        android:background="@drawable/logotelepizza"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logotelepizza" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

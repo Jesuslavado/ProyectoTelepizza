@@ -15,7 +15,7 @@ class SplashActivity : AppCompatActivity() {
         binding=ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
         screenSplash.setKeepOnScreenCondition{true}
-        Thread.sleep(200)
+        Thread.sleep(100)
         val intent= Intent(this,MainActivity::class.java)
         startActivity(intent)
         finish()
