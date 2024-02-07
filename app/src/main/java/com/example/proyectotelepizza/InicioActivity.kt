@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.proyectotelepizza.adapter.OfertasAdapter
 import com.example.proyectotelepizza.databinding.ActivityInicioBinding
 
-class InicioActivity : AppCompatActivity() {
+class InicioActivity : ActivityWhitMenus() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityInicioBinding.inflate(layoutInflater)
@@ -45,4 +45,3 @@ class InicioActivity : AppCompatActivity() {
         }
     }
     }
-}

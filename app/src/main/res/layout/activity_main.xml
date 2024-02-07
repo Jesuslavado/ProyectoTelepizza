@@ -29,7 +29,7 @@
         android:layout_marginEnd="42dp"
         android:ems="10"
         android:hint="Introduzca Contraseña"
-        android:inputType="text"
+        android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
