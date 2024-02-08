@@ -50,16 +50,18 @@ open class ActivityWhitMenus: AppCompatActivity() {
                 startActivity(intent)
                 true
             }
+            R.id.modificar ->{
+                actividadActual = 0;
+                //Hacemos que se habra la pantalla del listado de productos
+                val intent = Intent(this, ModificarActivity::class.java)
+                startActivity(intent)
+                true
+            }
 
             R.id.salir -> {
                 mostrarDialogoConfirmacionSalir()
                 true
             }
-
-
-
-         
-
             else -> super.onOptionsItemSelected(item)
         }
 

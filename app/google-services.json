@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "396204273218",
-    "project_id": "proyecto-telepizza",
-    "storage_bucket": "proyecto-telepizza.appspot.com"
+    "project_number": "495472204230",
+    "project_id": "telepizza-b8a9a",
+    "storage_bucket": "telepizza-b8a9a.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:396204273218:android:bfd67d454a7258486307db",
+        "mobilesdk_app_id": "1:495472204230:android:73b144fbdf8bb354dd7ac7",
         "android_client_info": {
           "package_name": "com.example.proyectotelepizza"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCObwAC-4F82Csum9eFLF8ATKXU8_4sS40"
+          "current_key": "AIzaSyCfHoSL-3PpIyK3ykgTN-r35aoCRgUntKw"
         }
       ],
       "services": {

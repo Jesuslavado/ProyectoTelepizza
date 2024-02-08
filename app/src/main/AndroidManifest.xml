@@ -15,6 +15,9 @@
         android:theme="@style/Theme.ProyectoTelepizza"
         tools:targetApi="31">
         <activity
+            android:name=".ModificarActivity"
+            android:exported="false" />
+        <activity
             android:name=".EliminarActivity"
             android:exported="false" />
         <activity
