@@ -29,7 +29,7 @@ open class ActivityWhitMenus: AppCompatActivity() {
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId){
-            R.id.ofertas ->{
+            R.id.mostrar ->{
                 actividadActual = 0;
                 //Hacemos que se habra la pantalla del listado de productos
                 val intent = Intent(this, InicioActivity::class.java)
