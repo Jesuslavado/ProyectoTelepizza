@@ -1,8 +1,8 @@
 package com.example.proyectotelepizza
 
-class OfertasProvider {
+class ProductoProvider {
     companion object{
-        val pizzaList= listOf<Ofertas>(
+        val pizzaList= listOf<Producto>(
 
 
         )

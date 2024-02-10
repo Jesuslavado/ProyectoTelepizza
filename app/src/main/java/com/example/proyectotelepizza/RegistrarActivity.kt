@@ -51,7 +51,7 @@ class RegistrarActivity : AppCompatActivity() {
                             .set(usuario)
                             .addOnSuccessListener {
                                 showToast("Usuario registrado correctamente")
-                                startActivity(Intent(this, InicioActivity::class.java))
+                                startActivity(Intent(this, MostrarActivity::class.java))
                                 finish()
                             }
                             .addOnFailureListener { exception ->

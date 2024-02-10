@@ -7,6 +7,31 @@
     tools:context=".ModificarActivity">
 
 
+    <ImageButton
+        android:id="@+id/mimagen"
+        android:layout_width="239dp"
+        android:layout_height="159dp"
+        android:layout_marginStart="85dp"
+        android:layout_marginTop="27dp"
+        android:layout_marginEnd="87dp"
+        android:contentDescription="Imagen de la pizza"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mtamano" />
+
+    <ImageView
+        android:id="@+id/fondo"
+        android:layout_width="414dp"
+        android:layout_height="730dp"
+        android:alpha="0.2"
+        android:background="@drawable/modificar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
@@ -89,18 +114,5 @@
         app:layout_constraintHorizontal_bias="0.904"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
-
-    <ImageView
-        android:id="@+id/fondo"
-        android:layout_width="414dp"
-        android:layout_height="730dp"
-        android:alpha="0.2"
-        android:background="@drawable/modificar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

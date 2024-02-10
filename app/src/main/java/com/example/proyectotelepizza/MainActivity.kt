@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
                     // Si tenemos exito
                     if(it.isSuccessful)
                     {
-                        val intent=Intent(this, InicioActivity::class.java)
+                        val intent=Intent(this, MostrarActivity::class.java)
                         startActivity(intent)
                     }else{
                         // Mensaje que aparecera si hubo  problemas

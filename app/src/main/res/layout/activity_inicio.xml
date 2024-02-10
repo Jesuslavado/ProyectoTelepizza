@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".InicioActivity">
+    tools:context=".MostrarActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler"
@@ -22,7 +22,7 @@
         android:layout_height="72dp"
         android:ems="10"
         android:inputType="text"
-        android:text="Name"
+        android:hint="Introduzca el nombre de la pizza"
         android:maxLines="1"
         app:layout_constraintBottom_toTopOf="@+id/recycler"
         app:layout_constraintEnd_toEndOf="parent"
