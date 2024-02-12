@@ -7,18 +7,6 @@
     tools:context=".ModificarActivity">
 
 
-    <ImageButton
-        android:id="@+id/mimagen"
-        android:layout_width="239dp"
-        android:layout_height="159dp"
-        android:layout_marginStart="85dp"
-        android:layout_marginTop="27dp"
-        android:layout_marginEnd="87dp"
-        android:contentDescription="Imagen de la pizza"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mtamano" />
-
     <ImageView
         android:id="@+id/fondo"
         android:layout_width="414dp"
@@ -32,18 +20,30 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
+    <ImageButton
+        android:id="@+id/mimagen"
+        android:layout_width="239dp"
+        android:layout_height="159dp"
+        android:layout_marginStart="85dp"
+        android:layout_marginTop="27dp"
+        android:layout_marginEnd="87dp"
+        android:background="@drawable/borde"
+        android:contentDescription="Imagen de la pizza"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mtamano" />
+
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="56dp"
         android:text="Modificar Pizzas"
         android:textColor="@color/black"
         android:textSize="32sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -51,11 +51,13 @@
         android:id="@+id/mid"
         android:layout_width="143dp"
         android:layout_height="57dp"
-        android:layout_marginStart="21dp"
-        android:layout_marginTop="45dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="60dp"
         android:ems="10"
         android:hint="ID"
         android:inputType="text"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
@@ -63,25 +65,29 @@
         android:id="@+id/mnombre"
         android:layout_width="251dp"
         android:layout_height="56dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="136dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
         android:ems="10"
         android:hint="Nombre"
         android:inputType="text"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/mid" />
 
     <EditText
         android:id="@+id/mingredientes"
         android:layout_width="251dp"
         android:layout_height="56dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="204dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
         android:ems="10"
         android:hint="Ingredientes"
         android:inputType="text"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/mnombre" />
 
     <Spinner
         android:id="@+id/mtamano"
@@ -97,10 +103,12 @@
         android:layout_width="258dp"
         android:layout_height="57dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="13dp"
+        android:layout_marginTop="12dp"
         android:ems="10"
         android:hint="Precio"
         android:inputType="numberDecimal"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mingredientes" />
 
@@ -108,10 +116,10 @@
         android:id="@+id/bmodificar"
         android:layout_width="149dp"
         android:layout_height="60dp"
-        android:layout_marginTop="45dp"
+        android:layout_marginTop="56dp"
         android:text="MODIFICAR"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.904"
+        app:layout_constraintHorizontal_bias="0.889"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
