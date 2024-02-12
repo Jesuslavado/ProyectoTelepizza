@@ -1,12 +1,7 @@
 package com.example.proyectotelepizza
 
-import android.content.ContentValues
-import android.graphics.Bitmap
-import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
-import android.provider.MediaStore
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Toast
@@ -22,14 +17,11 @@ class InsertarActivity : ActivityWhitMenus() {
     private val db = FirebaseFirestore.getInstance()
     private lateinit var storage: FirebaseStorage
     private lateinit var storageReference: StorageReference
-
-    // Variable para almacenar la URI de la imagen seleccionada
     private var selectedImageUri: Uri? = null
 
     private val pickMedia = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         if (uri != null) {
             binding.iimagen.setImageURI(uri)
-            // Almacena la URI de la imagen seleccionada en la variable global
             selectedImageUri = uri
         } else {
             // No se ha seleccionado ninguna imagen
@@ -135,13 +127,13 @@ class InsertarActivity : ActivityWhitMenus() {
             ))
             .addOnSuccessListener {
                 // La imagen y los datos se almacenaron exitosamente en Firestore
-                showToast("Producto almacenado exitosamente en Firestore")
+                showToast("Producto almacenado")
                 clearFields()
             }
             .addOnFailureListener { exception ->
                 // Manejar errores al almacenar en Firestore
                 Log.e("InsertarActivity", "Error al almacenar en Firestore: $exception")
-                showToast("Error al almacenar el producto en Firestore. Consulta los registros para más detalles.")
+                showToast("Error al almacenar el producto")
             }
     }
 

@@ -70,7 +70,7 @@ class ModificarActivity : ActivityWhitMenus() {
                         showToast("Error al obtener el producto: $exception")
                     }
             } else {
-                showToast("Por favor, ingrese un ID de producto válido")
+                showToast("Por favor, ingresa un ID de producto válido")
             }
         }
 
@@ -100,7 +100,7 @@ class ModificarActivity : ActivityWhitMenus() {
                     actualizarProductoEnFirestore(productId, nombre, ingredientes, tamano, precio, "")
                 }
             } else {
-                showToast("Por favor, ingrese un ID de producto válido")
+                showToast("Por favor, ingresa un ID de producto válido")
             }
         }
     }
@@ -109,7 +109,7 @@ class ModificarActivity : ActivityWhitMenus() {
         if (selectedImageUri != null) {
             // Sube la nueva imagen al almacenamiento de Firebase
             // Reemplaza "tu_ruta_en_el_almacenamiento" con la ruta deseada en tu almacenamiento de Firebase
-            val referenciaAlmacenamiento = FirebaseStorage.getInstance().getReference("tu_ruta_en_el_almacenamiento/${System.currentTimeMillis()}.jpg")
+            val referenciaAlmacenamiento = FirebaseStorage.getInstance().getReference("modificaciones/${System.currentTimeMillis()}.jpg")
 
             referenciaAlmacenamiento.putFile(selectedImageUri!!)
                 .addOnSuccessListener {

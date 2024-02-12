@@ -41,7 +41,7 @@ class RegistrarActivity : AppCompatActivity() {
                     if (task.isSuccessful) {
                         val usuario = hashMapOf(
                             "Usuario" to binding.usuario.text.toString(),
-                            "Constraseña" to binding.contrasenia.text.toString(),
+                            "Contraseña" to binding.contrasenia.text.toString(),
                             "Sexo" to selectedSexo,
                             "Direccion" to binding.direccion.text.toString()
                         )
