@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import com.example.proyectotelepizza.Cliente.MostrarClienteActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.example.proyectotelepizza.databinding.ActivityInicioBinding
 
@@ -25,12 +26,35 @@ open class ActivityWhitMenus : AppCompatActivity() {
             if (i == actividadActual) menu.getItem(i).isEnabled = false
             else menu.getItem(i).isEnabled = true
         }
+
+        // Obtiene el correo del usuario actual
+        val correoUsuario = FirebaseAuth.getInstance().currentUser?.email
+
+        // Si el correo no es kjblpo@gmail.com, oculta las opciones de menú específicas para ese usuario
+        if (correoUsuario != "kjblpo@gmail.com") {
+            val mostrarItem = menu.findItem(R.id.mostrar)
+            val insertarItem = menu.findItem(R.id.insertar)
+            val modificarItem = menu.findItem(R.id.modificar)
+            val eliminarItem = menu.findItem(R.id.eliminar)
+
+            mostrarItem.isVisible = false
+            insertarItem.isVisible = false
+            modificarItem.isVisible = false
+            eliminarItem.isVisible = false
+        }
+        else{
+            val mostrarItem_cliente = menu.findItem(R.id.mostrar_cliente)
+            mostrarItem_cliente.isVisible = false
+        }
+
+
         return true
     }
 
     // Método para manejar las acciones del menú
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            // ENCARGADOS
             R.id.mostrar -> {
                 actividadActual = 0
                 val intent = Intent(this, MostrarActivity::class.java)
@@ -55,6 +79,16 @@ open class ActivityWhitMenus : AppCompatActivity() {
                 startActivity(intent)
                 true
             }
+
+            // CLIENTES
+            R.id.mostrar_cliente -> {
+                actividadActual = 4
+                val intent = Intent(this, MostrarClienteActivity::class.java)
+                startActivity(intent)
+                true
+            }
+
+            // CLIENTES Y ENCARGADOS
             R.id.cerra_sesion -> {
                 mostrarDialogoConfirmacionCerrarSesion()
                 true

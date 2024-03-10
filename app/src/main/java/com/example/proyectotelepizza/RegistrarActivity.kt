@@ -5,8 +5,10 @@ import android.os.Bundle
 import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.proyectotelepizza.Cliente.MostrarClienteActivity
 import com.example.proyectotelepizza.databinding.ActivityRegistrarBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 
 class RegistrarActivity : AppCompatActivity() {
@@ -34,35 +36,70 @@ class RegistrarActivity : AppCompatActivity() {
                 binding.contrasenia.text.isNotEmpty() &&
                 selectedSexo.isNotEmpty()
             ) {
-                FirebaseAuth.getInstance().createUserWithEmailAndPassword(
-                    binding.usuario.text.toString(),
-                    binding.contrasenia.text.toString()
-                ).addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val usuario = hashMapOf(
-                            "Usuario" to binding.usuario.text.toString(),
-                            "Contraseña" to binding.contrasenia.text.toString(),
-                            "Sexo" to selectedSexo,
-                            "Direccion" to binding.direccion.text.toString()
-                        )
+                // Verificar si el usuario ya está registrado por nombre o teléfono
+                db.collection("Registro")
+                    .whereEqualTo("Usuario", binding.usuario.text.toString())
+                    .get()
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            if (!task.result?.isEmpty!!) {
+                                showToast("Este nombre de usuario ya está registrado")
+                                return@addOnCompleteListener
+                            }
 
-                        db.collection("Registro")
-                            .document(binding.telefono.text.toString())
-                            .set(usuario)
-                            .addOnSuccessListener {
-                                showToast("Usuario registrado correctamente")
-                                startActivity(Intent(this, MostrarActivity::class.java))
-                                finish()
-                            }
-                            .addOnFailureListener { exception ->
-                                showToast("Error al guardar en la base de datos: $exception")
-                            }
-                    } else {
-                        showToast("No se ha podido registrar el usuario: ${task.exception?.message}")
+                            // Verificar si el usuario ya está registrado por teléfono
+                            db.collection("Registro")
+                                .document(binding.telefono.text.toString())
+                                .get()
+                                .addOnCompleteListener { telTask ->
+                                    if (telTask.isSuccessful) {
+                                        val document: DocumentSnapshot? = telTask.result
+                                        if (document != null && document.exists()) {
+                                            showToast("Este teléfono ya está registrado")
+                                        } else {
+                                            // Crear nuevo usuario
+                                            registrarNuevoUsuario(selectedSexo)
+                                        }
+                                    } else {
+                                        showToast("Error al verificar teléfono: ${telTask.exception?.message}")
+                                    }
+                                }
+                        } else {
+                            showToast("Error al verificar usuario: ${task.exception?.message}")
+                        }
                     }
-                }
             } else {
                 showToast("Todos los campos deben ser completados")
+            }
+        }
+    }
+
+    private fun registrarNuevoUsuario(selectedSexo: String) {
+        FirebaseAuth.getInstance().createUserWithEmailAndPassword(
+            binding.usuario.text.toString(),
+            binding.contrasenia.text.toString()
+        ).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val usuario = hashMapOf(
+                    "Usuario" to binding.usuario.text.toString(),
+                    "Contraseña" to binding.contrasenia.text.toString(),
+                    "Sexo" to selectedSexo,
+                    "Direccion" to binding.direccion.text.toString()
+                )
+
+                FirebaseFirestore.getInstance().collection("Registro")
+                    .document(binding.telefono.text.toString())
+                    .set(usuario)
+                    .addOnSuccessListener {
+                        showToast("Usuario registrado correctamente")
+                        startActivity(Intent(this, MostrarClienteActivity::class.java))
+                        finish()
+                    }
+                    .addOnFailureListener { exception ->
+                        showToast("Error al guardar en la base de datos: $exception")
+                    }
+            } else {
+                showToast("No se ha podido registrar el usuario: ${task.exception?.message}")
             }
         }
     }

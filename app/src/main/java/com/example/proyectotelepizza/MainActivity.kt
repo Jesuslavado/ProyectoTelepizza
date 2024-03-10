@@ -1,11 +1,11 @@
 package com.example.proyectotelepizza
 
-import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import com.example.proyectotelepizza.Cliente.MostrarClienteActivity
 import com.example.proyectotelepizza.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
 
@@ -48,8 +48,19 @@ class MainActivity : AppCompatActivity() {
                 .addOnCompleteListener { task ->
                     // Si la operación es exitosa
                     if (task.isSuccessful) {
-                        val intent = Intent(this, MostrarActivity::class.java)
-                        startActivity(intent)
+                        // Verificamos el correo electrónico del usuario
+                        val correoUsuario = binding.usuario.text.toString()
+
+                        //Comrobar gmail
+                        if (correoUsuario == "kjblpo@gmail.com") {
+                            // Si el correo es 'kjblpo@gmail.com', ir a una pantalla de encargado
+                            val intent = Intent(this, MostrarActivity::class.java)
+                            startActivity(intent)
+                        } else {
+                            // Si el correo no es 'kjblpo@gmail.com', ir a la pantalla de cliente
+                            val intent = Intent(this, MostrarClienteActivity::class.java)
+                            startActivity(intent)
+                        }
                     } else {
                         // Mensaje que se mostrará si hay problemas durante el inicio de sesión
                         Toast.makeText(this, "Correo o contraseña incorrectos", Toast.LENGTH_SHORT).show()
