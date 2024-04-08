@@ -42,7 +42,7 @@ class MostrarClienteActivity : ActivityWhitMenus() {
         binding.filtro.addTextChangedListener { filtro ->
             // Actualiza la lista de productos en el adaptador según el filtro ingresado
             adapter.actualizarOfertas(listaProductos.filter { producto ->
-                producto.Nombre.lowercase().contains(filtro.toString().lowercase())
+                producto.Tamaño.lowercase().contains(filtro.toString().lowercase())
             })
         }
 

@@ -3,6 +3,8 @@ package com.example.proyectotelepizza
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -18,6 +20,7 @@ class InsertarActivity : ActivityWhitMenus() {
     private lateinit var storage: FirebaseStorage
     private lateinit var storageReference: StorageReference
     private var selectedImageUri: Uri? = null
+    private var nextPizzaId: Int = 0
 
     private val pickMedia = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         if (uri != null) {
@@ -46,16 +49,36 @@ class InsertarActivity : ActivityWhitMenus() {
         // Configurar el adaptador en el Spinner
         binding.Itamano.adapter = adapter
 
+        // Mapa que asocia los precios a los tamaños de pizza
+        val precios = mapOf(
+            "Pequeña" to 6.95,
+            "Mediana" to 8.95,
+            "Familiar" to 12.95
+        )
+
+        // Listener para actualizar el precio cuando se selecciona un tamaño
+        binding.Itamano.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selectedSize = parent?.getItemAtPosition(position).toString()
+                val precio = precios[selectedSize]
+                binding.Iprecio.setText(precio?.toString() ?: "")
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // No es necesario hacer nada aquí
+            }
+        }
+
         binding.binsertar.setOnClickListener {
             val nombre = binding.Inombre.text.toString()
-            val id = binding.Iid.text.toString()
+            val id = nextPizzaId.toString() // Utilizar el ID autoincrementado
             val ingredientes = binding.Iingredientes.text.toString()
             val tamano = binding.Itamano.selectedItem.toString()
             val precio = binding.Iprecio.text.toString()
 
             Log.d("InsertarActivity", "Nombre: $nombre, ID: $id, Ingredientes: $ingredientes, Tamaño: $tamano, Precio: $precio")
 
-            if (id.isNotEmpty() && nombre.isNotEmpty() && ingredientes.isNotEmpty() && tamano.isNotEmpty() && precio.isNotEmpty()) {
+            if (nombre.isNotEmpty() && ingredientes.isNotEmpty() && tamano.isNotEmpty() && precio.isNotEmpty()) {
                 // Verifica si se seleccionó una imagen antes de intentar almacenarla
                 if (selectedImageUri != null) {
                     // Sube la imagen a Firebase Storage y almacena la URL en Firestore
@@ -72,10 +95,26 @@ class InsertarActivity : ActivityWhitMenus() {
         binding.iimagen.setOnClickListener {
             pickMedia.launch("image/*")
         }
+
+        // Obtener el próximo ID de pizza autoincrementado
+        obtenerProximoId()
     }
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+    }
+
+    private fun obtenerProximoId() {
+        // Consultar el número total de pizzas en Firestore
+        db.collection("Producto")
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                nextPizzaId = querySnapshot.size() + 1 // Incrementar el número total y asignarlo al próximo ID
+                Log.d("InsertarActivity", "Próximo ID: $nextPizzaId")
+            }
+            .addOnFailureListener { exception ->
+                Log.e("InsertarActivity", "Error al obtener el próximo ID: $exception")
+            }
     }
 
     private fun subirImagenAFirebase(imageUri: Uri, id: String, nombre: String, ingredientes: String,
@@ -139,10 +178,12 @@ class InsertarActivity : ActivityWhitMenus() {
 
     private fun clearFields() {
         binding.Inombre.text.clear()
-        binding.Iid.text.clear()
         binding.Iingredientes.text.clear()
         binding.Iprecio.text.clear()
         binding.iimagen.setImageResource(android.R.color.transparent) // Limpiar la imagen
         selectedImageUri = null // Limpiar la URI de la imagen seleccionada
+
+        // Incrementar el próximo ID para la siguiente inserción
+        nextPizzaId++
     }
 }

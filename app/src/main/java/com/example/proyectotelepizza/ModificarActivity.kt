@@ -3,6 +3,8 @@ package com.example.proyectotelepizza
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.bumptech.glide.Glide
@@ -20,71 +22,37 @@ class ModificarActivity : ActivityWhitMenus() {
         binding = ActivityModificarBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Cargar los IDs y nombres de las pizzas en el Spinner
+        cargarPizzas()
+
         // Lista de tamaños
         val tamanos = arrayOf("Pequeña", "Mediana", "Familiar")
 
-        // Adaptador para el Spinner
+        // Adaptador para el Spinner de tamaños
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, tamanos)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-        // Configurar el adaptador en el Spinner
         binding.mtamano.adapter = adapter
 
-        binding.bmodificar.setOnClickListener {
-            val productId = binding.mid.text.toString()
+        binding.mtamano.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                // Obtener el tamaño seleccionado
+                val tamanoSeleccionado = tamanos[position]
 
-            if (productId.isNotEmpty()) {
-                db.collection("Producto")
-                    .document(productId)
-                    .get()
-                    .addOnSuccessListener { documentSnapshot ->
-                        if (documentSnapshot.exists()) {
-                            val ingredientes = documentSnapshot.getString("Ingredientes") ?: ""
-                            val nombre = documentSnapshot.getString("Nombre") ?: ""
-                            val precio = documentSnapshot.getString("Precio") ?: ""
-                            val tamano = documentSnapshot.getString("Tamaño") ?: ""
-                            val urlImagen = documentSnapshot.getString("Imagen") ?: ""
+                // Obtener el precio correspondiente al tamaño seleccionado
+                val precio = obtenerPrecioPorTamano(tamanoSeleccionado)
 
-                            binding.mingredientes.setText(ingredientes)
-                            binding.mnombre.setText(nombre)
-                            binding.mprecio.setText(precio)
+                // Mostrar el precio en el EditText correspondiente
+                binding.mprecio.setText(precio)
+            }
 
-                            // Seleccionar el valor del Spinner según el valor en Firebase
-                            val tamanoIndex = tamanos.indexOf(tamano)
-                            if (tamanoIndex != -1) {
-                                binding.mtamano.setSelection(tamanoIndex)
-                            }
-
-                            // Cargar la imagen utilizando Glide o cualquier biblioteca de carga de imágenes
-                            // Asegúrate de haber agregado las dependencias necesarias para Glide
-                            Glide.with(this)
-                                .load(urlImagen)
-                                .into(binding.mimagen)
-
-                            showToast("Producto encontrado y cargado correctamente")
-                        } else {
-                            showToast("No se encontró el producto con el ID proporcionado")
-                        }
-                    }
-                    .addOnFailureListener { exception ->
-                        showToast("Error al obtener el producto: $exception")
-                    }
-            } else {
-                showToast("Por favor, ingresa un ID de producto válido")
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // No se necesita ninguna acción si no se selecciona ningún elemento
             }
         }
 
-        // Agregar lógica para seleccionar una nueva imagen
-        binding.mimagen.setOnClickListener {
-            // Puedes abrir la galería o utilizar un selector de archivos según tus necesidades
-            // Aquí estoy utilizando un intent para abrir la galería
-            val intent = Intent(Intent.ACTION_PICK)
-            intent.type = "image/*"
-            startActivityForResult(intent, PICK_IMAGE_REQUEST)
-        }
-
         binding.bmodificar.setOnClickListener {
-            val productId = binding.mid.text.toString()
+            val producto = binding.midSpinner.selectedItem as Pair<String, String>
+            val productId = producto.first
 
             if (productId.isNotEmpty()) {
                 val nombre = binding.mnombre.text.toString()
@@ -100,14 +68,58 @@ class ModificarActivity : ActivityWhitMenus() {
                     actualizarProductoEnFirestore(productId, nombre, ingredientes, tamano, precio, "")
                 }
             } else {
-                showToast("Por favor, ingresa un ID de producto válido")
+                showToast("Por favor, selecciona una pizza válida")
             }
         }
     }
 
+    // Método para cargar los IDs y nombres de las pizzas en el Spinner
+    private fun cargarPizzas() {
+        db.collection("Producto")
+            .get()
+            .addOnSuccessListener { result ->
+                val pizzasList = mutableListOf<Pair<String, String>>()
+
+                for (document in result) {
+                    val id = document.id
+                    val nombre = document.getString("Nombre")
+                    if (nombre != null) {
+                        pizzasList.add(Pair(id, nombre))
+                    }
+                }
+
+                // Crear un adaptador para el Spinner con los IDs y nombres de las pizzas
+                val adapter = ArrayAdapter<Pair<String, String>>(
+                    this,
+                    android.R.layout.simple_spinner_item,
+                    pizzasList
+                )
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+                // Configurar el adaptador en el Spinner
+                binding.midSpinner.adapter = adapter
+            }
+            .addOnFailureListener { exception ->
+                showToast("Error al cargar las pizzas: $exception")
+            }
+    }
+
+    // Función para obtener el precio basado en el tamaño seleccionado
+    private fun obtenerPrecioPorTamano(tamano: String): String {
+        // Define el mapa de precios por tamaño
+        val preciosPorTamano = mapOf(
+            "Pequeña" to "6,95",
+            "Mediana" to "8,95",
+            "Familiar" to "12,95"
+        )
+        // Retorna el precio correspondiente al tamaño
+        return preciosPorTamano[tamano] ?: ""
+    }
+
+    // Método para subir una nueva imagen a Firebase Storage
     private fun subirNuevaImagenAFirebase(productId: String, nombre: String, ingredientes: String, tamano: String, precio: String) {
         if (selectedImageUri != null) {
-            // Sube la nueva imagen al almacenamiento de Firebase
+            // Subir la nueva imagen al almacenamiento de Firebase
             // Reemplaza "tu_ruta_en_el_almacenamiento" con la ruta deseada en tu almacenamiento de Firebase
             val referenciaAlmacenamiento = FirebaseStorage.getInstance().getReference("modificaciones/${System.currentTimeMillis()}.jpg")
 
@@ -128,6 +140,7 @@ class ModificarActivity : ActivityWhitMenus() {
         }
     }
 
+    // Método para actualizar los datos de un producto en Firestore
     private fun actualizarProductoEnFirestore(productId: String, nombre: String, ingredientes: String, tamano: String, precio: String, urlImagen: String) {
         // Actualiza los datos en Firestore
         db.collection("Producto").document(productId).update(
@@ -142,7 +155,7 @@ class ModificarActivity : ActivityWhitMenus() {
             showToast("Producto modificado correctamente")
 
             // Limpia los campos después de la modificación exitosa
-            binding.mid.text = null
+            binding.midSpinner.setSelection(0) // Establece la selección del Spinner a la primera posición
             binding.mnombre.text = null
             binding.mingredientes.text = null
             binding.mtamano.setSelection(0) // Establece la selección del Spinner a la primera posición
@@ -153,7 +166,12 @@ class ModificarActivity : ActivityWhitMenus() {
         }
     }
 
-    // Agrega este método para manejar el resultado de la selección de la imagen
+    // Método para mostrar un Toast con un mensaje
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    // Método para manejar el resultado de la selección de la imagen
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -164,10 +182,6 @@ class ModificarActivity : ActivityWhitMenus() {
                 .load(selectedImageUri)
                 .into(binding.mimagen)
         }
-    }
-
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
     companion object {
