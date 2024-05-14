@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import com.example.proyectotelepizza.Cliente.MostrarClienteActivity
 import com.example.proyectotelepizza.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
 

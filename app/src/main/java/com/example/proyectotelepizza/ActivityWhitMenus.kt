@@ -6,9 +6,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import com.example.proyectotelepizza.Cliente.MostrarClienteActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.example.proyectotelepizza.databinding.ActivityInicioBinding
 
 // Clase base para actividades con menús
 open class ActivityWhitMenus : AppCompatActivity() {
@@ -84,6 +82,13 @@ open class ActivityWhitMenus : AppCompatActivity() {
             R.id.mostrar_cliente -> {
                 actividadActual = 4
                 val intent = Intent(this, MostrarClienteActivity::class.java)
+                startActivity(intent)
+                true
+            }
+
+            R.id.Carro-> {
+                actividadActual = 5
+                val intent = Intent(this, CarroComprasActivity::class.java)
                 startActivity(intent)
                 true
             }

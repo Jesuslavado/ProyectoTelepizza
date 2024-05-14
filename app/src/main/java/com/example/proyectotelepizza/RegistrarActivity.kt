@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.proyectotelepizza.Cliente.MostrarClienteActivity
 import com.example.proyectotelepizza.databinding.ActivityRegistrarBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot

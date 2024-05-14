@@ -27,6 +27,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:title="Ver Pizzas" />
+
+    <item
+        android:id="@+id/Carro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="Carro" />
     <item
         android:id="@+id/cerra_sesion"
         android:layout_width="wrap_content"
