@@ -8,7 +8,7 @@ import com.example.proyectotelepizza.databinding.ItemOfertasBinding
 // Clase que representa un elemento en la lista de productos
 class ProductoViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     // El binding nos permite acceder a los elementos de la interfaz gráfica
-    private val binding = ItemOfertasBinding.bind(view)
+     val binding = ItemOfertasBinding.bind(view)
 
     // Método para mostrar los datos de un producto en la vista
     fun render(ofertasModel: Producto) {
@@ -26,5 +26,6 @@ class ProductoViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             .load(ofertasModel.Imagen)
             .into(binding.fotooferta)
     }
+
 
 }

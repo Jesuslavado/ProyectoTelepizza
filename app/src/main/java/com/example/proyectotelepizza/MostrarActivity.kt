@@ -31,7 +31,7 @@ class MostrarActivity : ActivityWhitMenus() {
         recycler.layoutManager = LinearLayoutManager(this)
 
         // Inicialización del adaptador y asignación al RecyclerView
-        adapter = ProductoAdapter(listaProductos)
+        adapter = ProductoAdapter(listaProductos,emptyList())
         recycler.adapter = adapter
 
         // Agrega un listener al campo de filtro para realizar búsquedas dinámicas
