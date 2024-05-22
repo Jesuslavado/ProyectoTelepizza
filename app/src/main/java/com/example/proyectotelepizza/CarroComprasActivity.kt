@@ -3,6 +3,7 @@ package com.example.proyectotelepizza
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -38,11 +39,11 @@ class CarroComprasActivity : ActivityWhitMenus() {
             eliminarTodosLosProductos()
         }
 
+        // Configurar el OnClickListener para el botón de comprar
         binding.bcomprar.setOnClickListener {
-            // Abrir la actividad para mostrar la imagen del código QR
-            val intent = Intent(this, QRCodeActivity::class.java)
-            startActivity(intent)
+            realizarPago()
         }
+
         // Calcular y mostrar el precio total
         mostrarPrecioTotal()
     }
@@ -83,6 +84,24 @@ class CarroComprasActivity : ActivityWhitMenus() {
         binding.tvTotal.text = "Total: $precioTotal" // Mostrar el precio total en el TextView
     }
 
+    // Método para realizar el pago
+    private fun realizarPago() {
+        val precioTotal = binding.tvTotal.text.toString().replace("Total: ", "").toFloatOrNull()
 
+        val url = when {
+            precioTotal == 6.95f -> "https://buy.stripe.com/test_8wMeXDgmBeKOfHqfZ0"
+            precioTotal == 8.95f -> "https://buy.stripe.com/test_9AQ6r76M1fOS9j2bIJ"
+            precioTotal == 12.95f -> "https://buy.stripe.com/test_5kA4iZ2vL8mqeDm8ww"
+            precioTotal ?: 0f > 12.95f -> "https://revolut.me/jesuspg42"
+            else -> null
+        }
 
+        if (url != null) {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse(url)
+            startActivity(intent)
+        } else {
+            Toast.makeText(this, "No hay un URL de pago disponible para el total: $precioTotal", Toast.LENGTH_SHORT).show()
+        }
+    }
 }
