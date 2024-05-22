@@ -21,20 +21,17 @@
         android:theme="@style/Theme.ProyectoTelepizza"
         tools:targetApi="31">
         <activity
-            android:name=".CarroComprasActivity"
+            android:name=".QRCodeActivity"
             android:exported="false" />
         <activity
             android:name=".CarroComprasActivity"
             android:exported="false" />
-        <activity
-            android:name=".Carro_Compra"
-            android:exported="false" />
+        ¡
+        ¡¡
         <activity
             android:name=".MostrarClienteActivity"
             android:exported="false" />
-        <activity
-            android:name=".adapter.MostrarClienteActivity"
-            android:exported="false" />
+        ¡
         <activity
             android:name=".ModificarActivity"
             android:exported="false" />

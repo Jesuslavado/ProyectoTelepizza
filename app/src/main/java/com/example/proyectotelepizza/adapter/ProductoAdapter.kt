@@ -35,18 +35,15 @@ class ProductoAdapter(
             // Obtener la lista actual de productos en el carrito
             val carritoJson = sharedPreferences.getString("carritoProductos", "[]")
             val carritoListType = object : TypeToken<MutableList<Producto>>() {}.type
-            val carrito = gson.fromJson<MutableList<Producto>>(carritoJson, carritoListType) ?: mutableListOf()
+            val carrito: MutableList<Producto> = gson.fromJson(carritoJson, carritoListType) ?: mutableListOf()
 
             // Añadir el nuevo producto al carrito
             carrito.add(ofertaslist[position])
 
             // Guardar la lista actualizada en SharedPreferences
             editor.putString("carritoProductos", gson.toJson(carrito))
-            editor.apply()
+            editor.commit() // Usa commit() en lugar de apply() para asegurar que se guarde antes de proceder
 
-            // Crear un intent para abrir la actividad del carrito de compras
-            val intent = Intent(context, CarroComprasActivity::class.java)
-            context.startActivity(intent)
         }
     }
 

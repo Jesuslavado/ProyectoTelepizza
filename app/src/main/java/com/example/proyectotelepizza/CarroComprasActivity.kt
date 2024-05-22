@@ -1,8 +1,10 @@
 package com.example.proyectotelepizza
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.proyectotelepizza.adapter_Cliente.ClienteAdapter
 import com.example.proyectotelepizza.databinding.ActivityCarroComprasBinding
@@ -30,6 +32,19 @@ class CarroComprasActivity : ActivityWhitMenus() {
         productosEnCarrito = gson.fromJson(carritoJson, carritoListType) ?: arrayListOf()
 
         setupRecyclerView()
+
+        // Configurar el OnClickListener para el botón de eliminar todos los productos
+        binding.beliminarproducto.setOnClickListener {
+            eliminarTodosLosProductos()
+        }
+
+        binding.bcomprar.setOnClickListener {
+            // Abrir la actividad para mostrar la imagen del código QR
+            val intent = Intent(this, QRCodeActivity::class.java)
+            startActivity(intent)
+        }
+        // Calcular y mostrar el precio total
+        mostrarPrecioTotal()
     }
 
     private fun setupRecyclerView() {
@@ -38,19 +53,36 @@ class CarroComprasActivity : ActivityWhitMenus() {
         binding.rvListaCarro.adapter = adapter
     }
 
-    // Método para agregar un producto al carrito
-    fun agregarProductoAlCarrito(producto: Producto) {
-        // Agregar el nuevo producto a la lista
-        productosEnCarrito.add(producto)
+    // Método para eliminar todos los productos del carrito
+    private fun eliminarTodosLosProductos() {
+        if (productosEnCarrito.isNotEmpty()) {
+            // Limpiar la lista de productos en el carrito
+            productosEnCarrito.clear()
+            // Notificar al adaptador del cambio
+            adapter.actualizarProductos(productosEnCarrito)
+            // Guardar la lista vacía en SharedPreferences
+            val gson = Gson()
+            val carritoJson = gson.toJson(productosEnCarrito)
+            val editor = sharedPreferences.edit()
+            editor.putString("carritoProductos", carritoJson)
+            editor.apply()
 
-        // Guardar la lista actualizada en SharedPreferences
-        val gson = Gson()
-        val carritoJson = gson.toJson(productosEnCarrito)
-        val editor = sharedPreferences.edit()
-        editor.putString("carritoProductos", carritoJson)
-        editor.apply()
-
-        // Actualizar el adaptador para mostrar el nuevo producto
-        adapter.actualizarProductos(productosEnCarrito)
+            // Actualizar el precio total después de eliminar todos los productos
+            mostrarPrecioTotal()
+        }
     }
+
+    // Método para mostrar el precio total de los productos en el carrito
+    private fun mostrarPrecioTotal() {
+        var precioTotal = 0f
+        for (producto in productosEnCarrito) {
+            producto.Precio.toFloatOrNull()?.let {
+                precioTotal += it
+            }
+        }
+        binding.tvTotal.text = "Total: $precioTotal" // Mostrar el precio total en el TextView
+    }
+
+
+
 }
