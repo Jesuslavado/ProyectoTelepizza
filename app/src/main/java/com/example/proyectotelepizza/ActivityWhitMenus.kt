@@ -43,6 +43,9 @@ open class ActivityWhitMenus : AppCompatActivity() {
         else{
             val mostrarItem_cliente = menu.findItem(R.id.mostrar_cliente)
             mostrarItem_cliente.isVisible = false
+
+            val CarroComprasActivity = menu.findItem(R.id.Carro)
+            CarroComprasActivity.isVisible = false
         }
 
 
@@ -101,6 +104,7 @@ open class ActivityWhitMenus : AppCompatActivity() {
             R.id.salir -> {
                 mostrarDialogoConfirmacionSalir()
                 true
+
             }
             else -> super.onOptionsItemSelected(item)
         }
@@ -108,11 +112,14 @@ open class ActivityWhitMenus : AppCompatActivity() {
 
     // Método para cerrar sesión
     private fun cerrarSesion() {
+
         FirebaseAuth.getInstance().signOut()
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()
+
     }
+
 
     // Método para mostrar un diálogo de confirmación al cerrar sesión
     private fun mostrarDialogoConfirmacionCerrarSesion() {

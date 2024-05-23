@@ -7,6 +7,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.example.proyectotelepizza.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
+import android.content.Context
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -15,6 +17,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        limpiarCarrito()
 
         // Configuramos la función del botón iniciar sesión
         binding.biniciarsesion.setOnClickListener {
@@ -83,5 +86,11 @@ class MainActivity : AppCompatActivity() {
             // No hacer nada, simplemente cerrar el cuadro de diálogo
         }
         builder.show()
+    }
+    private fun limpiarCarrito() {
+        val sharedPreferences = getSharedPreferences("carrito", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.clear() // Elimina todos los datos del SharedPreferences
+        editor.apply()
     }
 }
