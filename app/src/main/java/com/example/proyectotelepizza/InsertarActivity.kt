@@ -21,6 +21,7 @@ class InsertarActivity : ActivityWhitMenus() {
     private lateinit var storageReference: StorageReference
     private var selectedImageUri: Uri? = null
 
+
     private val pickMedia = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         if (uri != null) {
             binding.iimagen.setImageURI(uri)
@@ -138,15 +139,17 @@ class InsertarActivity : ActivityWhitMenus() {
 
     private fun almacenarProductoFirestore(id: String, nombre: String, ingredientes: String,
                                            tamano: String, precio: String, urlImagen: String) {
-        // Verificar si el ID ya existe en Firestore
-        db.collection("Producto").document(id)
+        // Verificar si ya existe un producto con el mismo nombre y tamaño en Firestore
+        db.collection("Producto")
+            .whereEqualTo("Nombre", nombre)
+            .whereEqualTo("Tamaño", tamano)
             .get()
-            .addOnSuccessListener { documentSnapshot ->
-                if (documentSnapshot.exists()) {
-                    // El documento con el ID proporcionado ya existe en Firestore
-                    showToast("Ya existe un producto con el ID $id")
+            .addOnSuccessListener { querySnapshot ->
+                if (!querySnapshot.isEmpty) {
+                    // Ya existe un producto con el mismo nombre y tamaño
+                    showToast("Ya existe un producto con el mismo nombre y tamaño")
                 } else {
-                    // El documento con el ID proporcionado no existe, se puede realizar la inserción
+                    // No existe un producto con el mismo nombre y tamaño, se puede realizar la inserción
                     // Almacena los datos en Firestore
                     db.collection("Producto").document(id)
                         .set(mapOf(
@@ -169,11 +172,12 @@ class InsertarActivity : ActivityWhitMenus() {
                 }
             }
             .addOnFailureListener { exception ->
-                // Manejar errores al verificar la existencia del documento en Firestore
-                Log.e("InsertarActivity", "Error al verificar la existencia del documento en Firestore: $exception")
-                showToast("Error al verificar la existencia del producto")
+                // Manejar errores al realizar la consulta en Firestore
+                Log.e("InsertarActivity", "Error al consultar en Firestore: $exception")
+                showToast("Error al consultar el producto")
             }
     }
+
 
     private fun clearFields() {
         binding.Inombre.text.clear()

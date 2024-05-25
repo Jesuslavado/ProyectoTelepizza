@@ -79,6 +79,23 @@ class RegistrarActivity : AppCompatActivity() {
             binding.contrasenia.text.toString()
         ).addOnCompleteListener { task ->
             if (task.isSuccessful) {
+                val user = FirebaseAuth.getInstance().currentUser
+
+                user?.sendEmailVerification()?.addOnCompleteListener { emailTask ->
+                    if (emailTask.isSuccessful) {
+                        showToast("Se ha enviado un correo electrónico de verificación a ${user.email}")
+
+                        // Cerrar la sesión del usuario actual
+                        FirebaseAuth.getInstance().signOut()
+
+                        // Redirigir al usuario a la pantalla principal (MainActivity)
+                        startActivity(Intent(this, MainActivity::class.java))
+                        finish()
+                    } else {
+                        showToast("Error al enviar el correo electrónico de verificación: ${emailTask.exception?.message}")
+                    }
+                }
+
                 val usuario = hashMapOf(
                     "Usuario" to binding.usuario.text.toString(),
                     "Contraseña" to binding.contrasenia.text.toString(),
@@ -90,9 +107,8 @@ class RegistrarActivity : AppCompatActivity() {
                     .document(binding.telefono.text.toString())
                     .set(usuario)
                     .addOnSuccessListener {
-                        showToast("Usuario registrado correctamente")
-                        startActivity(Intent(this, MostrarClienteActivity::class.java))
-                        finish()
+                        // showToast("Usuario registrado correctamente")
+                        // No mostramos el Toast aquí para evitar confusión, ya que el usuario debe verificar su correo electrónico antes de acceder
                     }
                     .addOnFailureListener { exception ->
                         showToast("Error al guardar en la base de datos: $exception")
@@ -102,6 +118,8 @@ class RegistrarActivity : AppCompatActivity() {
             }
         }
     }
+
+
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()

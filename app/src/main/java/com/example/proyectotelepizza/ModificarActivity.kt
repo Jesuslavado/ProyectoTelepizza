@@ -166,29 +166,47 @@ class ModificarActivity : ActivityWhitMenus() {
 
     // Método para actualizar los datos de un producto en Firestore
     private fun actualizarProductoEnFirestore(productId: String, nombre: String, ingredientes: String, tamano: String, precio: String, urlImagen: String) {
-        // Actualiza los datos en Firestore
-        db.collection("Producto").document(productId).update(
-            mapOf(
-                "Nombre" to nombre,
-                "Ingredientes" to ingredientes,
-                "Tamaño" to tamano,
-                "Precio" to precio,
-                "Imagen" to urlImagen
-            )
-        ).addOnSuccessListener {
-            showToast("Producto modificado correctamente")
+        // Verificar si ya existe un producto con el mismo nombre y tamaño en Firestore
+        db.collection("Producto")
+            .whereEqualTo("Nombre", nombre)
+            .whereEqualTo("Tamaño", tamano)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                if (!querySnapshot.isEmpty) {
+                    // Ya existe un producto con el mismo nombre y tamaño
+                    showToast("Ya existe un producto con el mismo nombre y tamaño")
+                } else {
+                    // No existe un producto con el mismo nombre y tamaño, se puede realizar la actualización
+                    // Actualiza los datos en Firestore
+                    db.collection("Producto").document(productId).update(
+                        mapOf(
+                            "Nombre" to nombre,
+                            "Ingredientes" to ingredientes,
+                            "Tamaño" to tamano,
+                            "Precio" to precio,
+                            "Imagen" to urlImagen
+                        )
+                    ).addOnSuccessListener {
+                        showToast("Producto modificado correctamente")
 
-            // Limpia los campos después de la modificación exitosa
-            binding.midSpinner.setSelection(0) // Establece la selección del Spinner a la primera posición
-            binding.mnombre.text = null
-            binding.mingredientes.text = null
-            binding.mtamano.setSelection(0) // Establece la selección del Spinner a la primera posición
-            binding.mprecio.text = null
-            binding.mimagen.setImageDrawable(null) // Limpia la imagen del ImageView
-        }.addOnFailureListener { exception ->
-            showToast("Error al modificar el producto: $exception")
-        }
+                        // Limpia los campos después de la modificación exitosa
+                        binding.midSpinner.setSelection(0) // Establece la selección del Spinner a la primera posición
+                        binding.mnombre.text = null
+                        binding.mingredientes.text = null
+                        binding.mtamano.setSelection(0) // Establece la selección del Spinner a la primera posición
+                        binding.mprecio.text = null
+                        binding.mimagen.setImageDrawable(null) // Limpia la imagen del ImageView
+                    }.addOnFailureListener { exception ->
+                        showToast("Error al modificar el producto: $exception")
+                    }
+                }
+            }
+            .addOnFailureListener { exception ->
+                // Manejar errores al realizar la consulta en Firestore
+                showToast("Error al consultar el producto: $exception")
+            }
     }
+
 
     // Método para mostrar un Toast con un mensaje
     private fun showToast(message: String) {

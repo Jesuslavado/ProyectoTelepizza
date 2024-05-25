@@ -1,12 +1,20 @@
 package com.example.proyectotelepizza
 
 import ClienteAdapter
+import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.proyectotelepizza.databinding.ActivityCarroComprasBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -26,7 +34,9 @@ class CarroComprasActivity : ActivityWhitMenus() {
         private lateinit var db: FirebaseFirestore
         private lateinit var currentUserEmail: String
 
-        override fun onCreate(savedInstanceState: Bundle?) {
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
             binding = ActivityCarroComprasBinding.inflate(layoutInflater)
             setContentView(binding.root)
@@ -63,6 +73,7 @@ class CarroComprasActivity : ActivityWhitMenus() {
             binding.bcomprar.setOnClickListener {
                 realizarPago()
                 realizarPedido()
+
             }
 
             // Calcular y mostrar el precio total
@@ -70,7 +81,10 @@ class CarroComprasActivity : ActivityWhitMenus() {
 
         }
 
-        private fun setupRecyclerView() {
+
+
+
+    private fun setupRecyclerView() {
             binding.rvListaCarro.layoutManager = LinearLayoutManager(this)
             adapter = ClienteAdapter(productosEnCarrito) {
                 mostrarPrecioTotal()
