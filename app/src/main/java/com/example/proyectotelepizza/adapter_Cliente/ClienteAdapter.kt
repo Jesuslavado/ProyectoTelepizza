@@ -20,7 +20,6 @@ class ClienteAdapter(private var productosEnCarrito: MutableList<Producto>, priv
         // Configurar el OnClickListener para el botón de eliminar producto
         holder.binding.beliminarp.setOnClickListener {
             eliminarProducto(position)
-            onItemRemoved.invoke()
         }
     }
 
@@ -37,7 +36,10 @@ class ClienteAdapter(private var productosEnCarrito: MutableList<Producto>, priv
 
     // Método para eliminar un producto del carrito
     private fun eliminarProducto(position: Int) {
-        productosEnCarrito.removeAt(position)
-        notifyItemRemoved(position)
+        if (position in 0 until productosEnCarrito.size) {
+            productosEnCarrito.removeAt(position)
+            notifyItemRemoved(position)
+            onItemRemoved.invoke()
+        }
     }
 }

@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.proyectotelepizza.CarroComprasActivity
 import com.example.proyectotelepizza.Producto
@@ -43,7 +44,7 @@ class ProductoAdapter(
             // Guardar la lista actualizada en SharedPreferences
             editor.putString("carritoProductos", gson.toJson(carrito))
             editor.commit() // Usa commit() en lugar de apply() para asegurar que se guarde antes de proceder
-
+            Toast.makeText(context, "Producto añadido al carrito", Toast.LENGTH_SHORT).show()
         }
     }
 
