@@ -124,7 +124,7 @@ class InsertarActivity : ActivityWhitMenus() {
 
         // Referencia que apunta a un objeto dentro del espacio de almacenamiento de Storage
         // y que se encuentra en una carpeta llamada "imagenes" con el nombre ($nombreImagen)
-        val referenciaImagen = storageReference.child("imagenes/$nombreImagen")
+        val referenciaImagen = storageReference.child("Imagenes/$nombreImagen")
 
         // Subir la imagen a Firebase Storage
         referenciaImagen.putFile(imageUri)

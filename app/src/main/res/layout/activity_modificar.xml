@@ -24,12 +24,13 @@
         android:id="@+id/mimagen"
         android:layout_width="239dp"
         android:layout_height="159dp"
-        android:layout_marginStart="85dp"
-        android:layout_marginTop="27dp"
-        android:layout_marginEnd="87dp"
+        android:layout_marginStart="119dp"
+        android:layout_marginTop="58dp"
+        android:layout_marginEnd="140dp"
         android:background="@drawable/borde"
         android:contentDescription="Imagen de la pizza"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.379"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mtamano" />
 
@@ -49,11 +50,13 @@
 
     <Spinner
         android:id="@+id/midSpinner"
-        android:layout_width="208dp"
-        android:layout_height="33dp"
+        android:layout_width="218dp"
+        android:layout_height="46dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="60dp"
         android:layout_marginEnd="10dp"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/mnombre"
         app:layout_constraintEnd_toStartOf="@+id/bmodificar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textView2" />

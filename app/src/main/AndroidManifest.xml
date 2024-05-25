@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
+
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
@@ -20,9 +22,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ProyectoTelepizza"
         tools:targetApi="31">
-        <activity
-            android:name=".QRCodeActivity"
-            android:exported="false" />
+
         <activity
             android:name=".CarroComprasActivity"
             android:exported="false" />

@@ -13,6 +13,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.util.Locale
+import java.text.SimpleDateFormat
+import java.util.Calendar
 
 class CarroComprasActivity : ActivityWhitMenus() {
 
@@ -126,30 +129,49 @@ class CarroComprasActivity : ActivityWhitMenus() {
             }
         }
 
-        private fun realizarPedido() {
-            // Calcular el total del pedido
-            val total = productosEnCarrito.sumByDouble { it.Precio.toDouble() }.toFloat()
+    private fun realizarPedido() {
+        // Calcular el total del pedido
+        val total = productosEnCarrito.sumByDouble { it.Precio.toDouble() }.toFloat()
 
-            // Crear un nuevo pedido con el correo del usuario actual
-            val pedido = hashMapOf(
-                "correoUsuario" to currentUserEmail,
-                "total" to total,
-                "productos" to productosEnCarrito
-            )
+        // Crear un nuevo pedido con el correo del usuario actual
+        val pedido = hashMapOf(
+            "correoUsuario" to currentUserEmail,
+            "total" to total,
+            "productos" to productosEnCarrito,
+            "fecha" to obtenerFechaActual() // Agregar fecha y hora actual al pedido
+        )
 
-            // Guardar el pedido en Firestore
-            db.collection("Pedidos")
-                .add(pedido)
-                .addOnSuccessListener {
-                    Toast.makeText(this, "Pedido realizado con éxito", Toast.LENGTH_SHORT).show()
-                    // Limpiar el carrito después de realizar el pedido
-                    productosEnCarrito.clear()
-                    adapter.notifyDataSetChanged()
-                }
-                .addOnFailureListener {
-                    Toast.makeText(this, "Error al realizar el pedido", Toast.LENGTH_SHORT).show()
-                }
-        }
+        // Generar un ID basado en la fecha actual
+        val fechaActual = obtenerFechaActualSinEspacios() // Eliminar espacios para usar como ID
+        // Guardar el pedido en Firestore con la fecha como ID
+        db.collection("Pedidos")
+            .document(fechaActual) // Usar la fecha como ID del documento
+            .set(pedido)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Pedido realizado con éxito", Toast.LENGTH_SHORT).show()
+                // Limpiar el carrito después de realizar el pedido
+                productosEnCarrito.clear()
+                adapter.notifyDataSetChanged()
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Error al realizar el pedido", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    // Método para obtener la fecha y hora actual en el formato deseado
+    private fun obtenerFechaActual(): String {
+        val calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        return dateFormat.format(calendar.time)
+    }
+
+    // Método para obtener la fecha y hora actual sin espacios
+    private fun obtenerFechaActualSinEspacios(): String {
+        val calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd-(HH:mm:ss)", Locale.getDefault())
+        return dateFormat.format(calendar.time)
+    }
+
 
     // Método para limpiar el carrito
      fun limpiarCarrito() {

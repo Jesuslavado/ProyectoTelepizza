@@ -2,7 +2,9 @@ package com.example.proyectotelepizza
 
 import android.content.Intent
 import android.net.Uri
+import com.google.firebase.storage.StorageReference
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -11,16 +13,23 @@ import com.bumptech.glide.Glide
 import com.example.proyectotelepizza.databinding.ActivityModificarBinding
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import java.util.UUID
 
 class ModificarActivity : ActivityWhitMenus() {
     private lateinit var binding: ActivityModificarBinding
     private val db = FirebaseFirestore.getInstance()
     private var selectedImageUri: Uri? = null
+    private lateinit var storage: FirebaseStorage
+    private lateinit var storageReference: StorageReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityModificarBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Initialize Firebase Storage
+        storage = FirebaseStorage.getInstance()
+        storageReference = storage.reference
 
         // Cargar los IDs y nombres de las pizzas en el Spinner
         cargarPizzas()
@@ -71,6 +80,14 @@ class ModificarActivity : ActivityWhitMenus() {
                 showToast("Por favor, selecciona una pizza válida")
             }
         }
+
+        // Click listener for selecting image
+        binding.mimagen.setOnClickListener {
+            val intent = Intent()
+            intent.type = "image/*"
+            intent.action = Intent.ACTION_GET_CONTENT
+            startActivityForResult(Intent.createChooser(intent, "Selecciona una imagen"), PICK_IMAGE_REQUEST)
+        }
     }
 
     // Método para cargar los IDs y nombres de las pizzas en el Spinner
@@ -117,11 +134,16 @@ class ModificarActivity : ActivityWhitMenus() {
     }
 
     // Método para subir una nueva imagen a Firebase Storage
+    // Método para subir una nueva imagen a Firebase Storage
+    // Método para subir una nueva imagen a Firebase Storage
     private fun subirNuevaImagenAFirebase(productId: String, nombre: String, ingredientes: String, tamano: String, precio: String) {
         if (selectedImageUri != null) {
+
+            val nombreImagen = UUID.randomUUID().toString()
+
             // Subir la nueva imagen al almacenamiento de Firebase
             // Reemplaza "tu_ruta_en_el_almacenamiento" con la ruta deseada en tu almacenamiento de Firebase
-            val referenciaAlmacenamiento = FirebaseStorage.getInstance().getReference("modificaciones/${System.currentTimeMillis()}.jpg")
+            val referenciaAlmacenamiento = storageReference.child("Imagenes/$nombreImagen")
 
             referenciaAlmacenamiento.putFile(selectedImageUri!!)
                 .addOnSuccessListener {
@@ -139,6 +161,8 @@ class ModificarActivity : ActivityWhitMenus() {
                 }
         }
     }
+
+
 
     // Método para actualizar los datos de un producto en Firestore
     private fun actualizarProductoEnFirestore(productId: String, nombre: String, ingredientes: String, tamano: String, precio: String, urlImagen: String) {
@@ -177,7 +201,7 @@ class ModificarActivity : ActivityWhitMenus() {
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.data != null) {
             selectedImageUri = data.data
-            // Carga la nueva imagen en el ImageView (mfotooferta)
+            // Carga la nueva imagen en el ImageView (mimagen)
             Glide.with(this)
                 .load(selectedImageUri)
                 .into(binding.mimagen)

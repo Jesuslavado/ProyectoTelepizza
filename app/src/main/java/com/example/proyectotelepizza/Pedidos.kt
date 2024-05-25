@@ -4,6 +4,8 @@ data class Pedidos(
     val id: String = "",
     val correoUsuario: String = "",
     val total: Float = 0f,
-    val productos: List<Producto> = listOf()
+    val productos: List<Producto> = listOf(),
+    val fecha: String =""
+
 )
 
