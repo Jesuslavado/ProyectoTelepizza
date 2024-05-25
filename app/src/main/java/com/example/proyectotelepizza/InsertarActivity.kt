@@ -20,7 +20,6 @@ class InsertarActivity : ActivityWhitMenus() {
     private lateinit var storage: FirebaseStorage
     private lateinit var storageReference: StorageReference
     private var selectedImageUri: Uri? = null
-    private var nextPizzaId: Int = 0
 
     private val pickMedia = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         if (uri != null) {
@@ -71,7 +70,7 @@ class InsertarActivity : ActivityWhitMenus() {
 
         binding.binsertar.setOnClickListener {
             val nombre = binding.Inombre.text.toString()
-            val id = nextPizzaId.toString() // Utilizar el ID autoincrementado
+            val id = binding.Iid.text.toString() // Obtener el ID proporcionado
             val ingredientes = binding.Iingredientes.text.toString()
             val tamano = binding.Itamano.selectedItem.toString()
             val precio = binding.Iprecio.text.toString()
@@ -95,26 +94,10 @@ class InsertarActivity : ActivityWhitMenus() {
         binding.iimagen.setOnClickListener {
             pickMedia.launch("image/*")
         }
-
-        // Obtener el próximo ID de pizza autoincrementado
-        obtenerProximoId()
     }
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
-    }
-
-    private fun obtenerProximoId() {
-        // Consultar el número total de pizzas en Firestore
-        db.collection("Producto")
-            .get()
-            .addOnSuccessListener { querySnapshot ->
-                nextPizzaId = querySnapshot.size() + 1 // Incrementar el número total y asignarlo al próximo ID
-                Log.d("InsertarActivity", "Próximo ID: $nextPizzaId")
-            }
-            .addOnFailureListener { exception ->
-                Log.e("InsertarActivity", "Error al obtener el próximo ID: $exception")
-            }
     }
 
     private fun subirImagenAFirebase(imageUri: Uri, id: String, nombre: String, ingredientes: String,
@@ -155,24 +138,40 @@ class InsertarActivity : ActivityWhitMenus() {
 
     private fun almacenarProductoFirestore(id: String, nombre: String, ingredientes: String,
                                            tamano: String, precio: String, urlImagen: String) {
-        // Almacena los datos en Firestore
+        // Verificar si el ID ya existe en Firestore
         db.collection("Producto").document(id)
-            .set(mapOf(
-                "Nombre" to nombre,
-                "Ingredientes" to ingredientes,
-                "Tamaño" to tamano,
-                "Precio" to precio,
-                "Imagen" to urlImagen
-            ))
-            .addOnSuccessListener {
-                // La imagen y los datos se almacenaron exitosamente en Firestore
-                showToast("Producto almacenado")
-                clearFields()
+            .get()
+            .addOnSuccessListener { documentSnapshot ->
+                if (documentSnapshot.exists()) {
+                    // El documento con el ID proporcionado ya existe en Firestore
+                    showToast("Ya existe un producto con el ID $id")
+                } else {
+                    // El documento con el ID proporcionado no existe, se puede realizar la inserción
+                    // Almacena los datos en Firestore
+                    db.collection("Producto").document(id)
+                        .set(mapOf(
+                            "Nombre" to nombre,
+                            "Ingredientes" to ingredientes,
+                            "Tamaño" to tamano,
+                            "Precio" to precio,
+                            "Imagen" to urlImagen
+                        ))
+                        .addOnSuccessListener {
+                            // La imagen y los datos se almacenaron exitosamente en Firestore
+                            showToast("Producto almacenado")
+                            clearFields()
+                        }
+                        .addOnFailureListener { exception ->
+                            // Manejar errores al almacenar en Firestore
+                            Log.e("InsertarActivity", "Error al almacenar en Firestore: $exception")
+                            showToast("Error al almacenar el producto")
+                        }
+                }
             }
             .addOnFailureListener { exception ->
-                // Manejar errores al almacenar en Firestore
-                Log.e("InsertarActivity", "Error al almacenar en Firestore: $exception")
-                showToast("Error al almacenar el producto")
+                // Manejar errores al verificar la existencia del documento en Firestore
+                Log.e("InsertarActivity", "Error al verificar la existencia del documento en Firestore: $exception")
+                showToast("Error al verificar la existencia del producto")
             }
     }
 
@@ -180,10 +179,8 @@ class InsertarActivity : ActivityWhitMenus() {
         binding.Inombre.text.clear()
         binding.Iingredientes.text.clear()
         binding.Iprecio.text.clear()
+        binding.Iid.text.clear() // Limpiar el campo de ID
         binding.iimagen.setImageResource(android.R.color.transparent) // Limpiar la imagen
         selectedImageUri = null // Limpiar la URI de la imagen seleccionada
-
-        // Incrementar el próximo ID para la siguiente inserción
-        nextPizzaId++
     }
 }
