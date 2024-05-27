@@ -35,38 +35,43 @@ class RegistrarActivity : AppCompatActivity() {
                 binding.contrasenia.text.isNotEmpty() &&
                 selectedSexo.isNotEmpty()
             ) {
-                // Verificar si el usuario ya está registrado por nombre o teléfono
-                db.collection("Registro")
-                    .whereEqualTo("Usuario", binding.usuario.text.toString())
-                    .get()
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            if (!task.result?.isEmpty!!) {
-                                showToast("Este nombre de usuario ya está registrado")
-                                return@addOnCompleteListener
-                            }
-
-                            // Verificar si el usuario ya está registrado por teléfono
-                            db.collection("Registro")
-                                .document(binding.telefono.text.toString())
-                                .get()
-                                .addOnCompleteListener { telTask ->
-                                    if (telTask.isSuccessful) {
-                                        val document: DocumentSnapshot? = telTask.result
-                                        if (document != null && document.exists()) {
-                                            showToast("Este teléfono ya está registrado")
-                                        } else {
-                                            // Crear nuevo usuario
-                                            registrarNuevoUsuario(selectedSexo)
-                                        }
-                                    } else {
-                                        showToast("Error al verificar teléfono: ${telTask.exception?.message}")
-                                    }
+                val contrasenia = binding.contrasenia.text.toString()
+                if (contrasenia.length in 8..16) {
+                    // Verificar si el usuario ya está registrado por nombre o teléfono
+                    db.collection("Registro")
+                        .whereEqualTo("Usuario", binding.usuario.text.toString())
+                        .get()
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                if (!task.result?.isEmpty!!) {
+                                    showToast("Este nombre de usuario ya está registrado")
+                                    return@addOnCompleteListener
                                 }
-                        } else {
-                            showToast("Error al verificar usuario: ${task.exception?.message}")
+
+                                // Verificar si el usuario ya está registrado por teléfono
+                                db.collection("Registro")
+                                    .document(binding.telefono.text.toString())
+                                    .get()
+                                    .addOnCompleteListener { telTask ->
+                                        if (telTask.isSuccessful) {
+                                            val document: DocumentSnapshot? = telTask.result
+                                            if (document != null && document.exists()) {
+                                                showToast("Este teléfono ya está registrado")
+                                            } else {
+                                                // Crear nuevo usuario
+                                                registrarNuevoUsuario(selectedSexo)
+                                            }
+                                        } else {
+                                            showToast("Error al verificar teléfono: ${telTask.exception?.message}")
+                                        }
+                                    }
+                            } else {
+                                showToast("Error al verificar usuario: ${task.exception?.message}")
+                            }
                         }
-                    }
+                } else {
+                    showToast("La contraseña debe tener entre 8 y 16 caracteres")
+                }
             } else {
                 showToast("Todos los campos deben ser completados")
             }
@@ -118,8 +123,6 @@ class RegistrarActivity : AppCompatActivity() {
             }
         }
     }
-
-
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
