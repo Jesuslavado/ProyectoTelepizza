@@ -76,6 +76,16 @@ class InsertarActivity : ActivityWhitMenus() {
             val tamano = binding.Itamano.selectedItem.toString()
             val precio = binding.Iprecio.text.toString()
 
+            if (nombre.length > 30) {
+                showToast("El nombre no puede tener más de 30 caracteres")
+                return@setOnClickListener
+            }
+
+            if (ingredientes.length > 500) {
+                showToast("Los ingredientes no pueden tener más de 500 caracteres")
+                return@setOnClickListener
+            }
+
             Log.d("InsertarActivity", "Nombre: $nombre, ID: $id, Ingredientes: $ingredientes, Tamaño: $tamano, Precio: $precio")
 
             if (nombre.isNotEmpty() && ingredientes.isNotEmpty() && tamano.isNotEmpty() && precio.isNotEmpty()) {

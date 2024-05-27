@@ -22,6 +22,25 @@ class RegistrarActivity : AppCompatActivity() {
         val radioGroupSexo = findViewById<RadioGroup>(R.id.radioGroupSexo)
 
         binding.bregistrar.setOnClickListener {
+            val telefono = binding.telefono.text.toString()
+            val usuario = binding.usuario.text.toString()
+            val direccion = binding.direccion.text.toString()
+
+            if (telefono.length != 9) {
+                showToast("El teléfono debe tener exactamente 9 números")
+                return@setOnClickListener
+            }
+
+            if (usuario.length > 80) {
+                showToast("El nombre de usuario no puede tener más de 80 caracteres")
+                return@setOnClickListener
+            }
+
+            if (direccion.length > 100) {
+                showToast("La dirección no puede tener más de 100 caracteres")
+                return@setOnClickListener
+            }
+
             val selectedSexo = when (radioGroupSexo.checkedRadioButtonId) {
                 R.id.rbMujer -> "Mujer"
                 R.id.rbhombre -> "Hombre"
@@ -29,9 +48,9 @@ class RegistrarActivity : AppCompatActivity() {
                 else -> ""
             }
 
-            if (binding.usuario.text.isNotEmpty() &&
-                binding.telefono.text.isNotEmpty() &&
-                binding.direccion.text.isNotEmpty() &&
+            if (usuario.isNotEmpty() &&
+                telefono.isNotEmpty() &&
+                direccion.isNotEmpty() &&
                 binding.contrasenia.text.isNotEmpty() &&
                 selectedSexo.isNotEmpty()
             ) {
@@ -39,7 +58,7 @@ class RegistrarActivity : AppCompatActivity() {
                 if (contrasenia.length in 8..16) {
                     // Verificar si el usuario ya está registrado por nombre o teléfono
                     db.collection("Registro")
-                        .whereEqualTo("Usuario", binding.usuario.text.toString())
+                        .whereEqualTo("Usuario", usuario)
                         .get()
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
@@ -50,7 +69,7 @@ class RegistrarActivity : AppCompatActivity() {
 
                                 // Verificar si el usuario ya está registrado por teléfono
                                 db.collection("Registro")
-                                    .document(binding.telefono.text.toString())
+                                    .document(telefono)
                                     .get()
                                     .addOnCompleteListener { telTask ->
                                         if (telTask.isSuccessful) {

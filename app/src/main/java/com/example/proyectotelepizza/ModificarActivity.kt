@@ -69,6 +69,16 @@ class ModificarActivity : ActivityWhitMenus() {
                 val tamano = binding.mtamano.selectedItem.toString()
                 val precio = binding.mprecio.text.toString()
 
+                if (nombre.length > 30) {
+                    showToast("El nombre no puede tener más de 30 caracteres")
+                    return@setOnClickListener
+                }
+
+                if (ingredientes.length > 500) {
+                    showToast("Los ingredientes no pueden tener más de 500 caracteres")
+                    return@setOnClickListener
+                }
+
                 // Lógica para subir la nueva imagen si se ha seleccionado una
                 if (selectedImageUri != null) {
                     subirNuevaImagenAFirebase(productId, nombre, ingredientes, tamano, precio)
@@ -134,15 +144,11 @@ class ModificarActivity : ActivityWhitMenus() {
     }
 
     // Método para subir una nueva imagen a Firebase Storage
-    // Método para subir una nueva imagen a Firebase Storage
-    // Método para subir una nueva imagen a Firebase Storage
     private fun subirNuevaImagenAFirebase(productId: String, nombre: String, ingredientes: String, tamano: String, precio: String) {
         if (selectedImageUri != null) {
-
             val nombreImagen = UUID.randomUUID().toString()
 
             // Subir la nueva imagen al almacenamiento de Firebase
-            // Reemplaza "tu_ruta_en_el_almacenamiento" con la ruta deseada en tu almacenamiento de Firebase
             val referenciaAlmacenamiento = storageReference.child("Imagenes/$nombreImagen")
 
             referenciaAlmacenamiento.putFile(selectedImageUri!!)
@@ -161,8 +167,6 @@ class ModificarActivity : ActivityWhitMenus() {
                 }
         }
     }
-
-
 
     // Método para actualizar los datos de un producto en Firestore
     private fun actualizarProductoEnFirestore(productId: String, nombre: String, ingredientes: String, tamano: String, precio: String, urlImagen: String) {
@@ -206,7 +210,6 @@ class ModificarActivity : ActivityWhitMenus() {
                 showToast("Error al consultar el producto: $exception")
             }
     }
-
 
     // Método para mostrar un Toast con un mensaje
     private fun showToast(message: String) {
